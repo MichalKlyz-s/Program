@@ -1,0 +1,23 @@
+{
+   "compilerOptions": {
+    "module": "commonjs",
+    "lib": [
+      "ESNext", /* ESNext includes new Level-4 features that were
+               recently added to the ECMA-262 JS spec */
+      "es6",
+      "DOM"
+     ],
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "target": "ES2020",
+    "sourceMap": true,
+    "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "allowJs": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true
+   },
+   "include": ["src/**/*"],
+}
