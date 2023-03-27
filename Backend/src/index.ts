@@ -13,6 +13,7 @@ app.get('/midi', async (req, response) => {
     // console.log(midi.midi('test', 'test'))
     await response.send(midi.midi('test', 'test'));
     // response.status(200).end();
+    
 })
 app.listen(8888, () => {
     console.log('Aplikacja wystartowała')
