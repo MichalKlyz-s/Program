@@ -2,7 +2,7 @@ rendered/local/*
 node_modules/*
 /dist
 /dist_public
-
+package-lock.json
 .env
 .env.local
 
