@@ -1,4 +1,5 @@
 import {WebMidi} from "webmidi";
+import {chosenData} from "./midiData"
 let output = "Microsoft GS Wavetable Synth";
 
 export const choseMidi = (params: any, req: any) =>{
@@ -42,5 +43,7 @@ export const midi = (params: any, req: any) =>{
         'user': 'mk'
     }
     return  {'succes': true,
-    'user': 'mk'};
+    'user': 'mk',
+    'chosenData': chosenData
+  };
 }

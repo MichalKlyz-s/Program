@@ -1,7 +1,8 @@
 import express, { response } from 'express'
 import cors from 'cors';
+import {chosenData} from "./controllers/midiData"
+
 import * as fs from 'fs';
-import {hay} from './hello';
 import * as midi from './controllers/midi'
 import {WebMidi} from "webmidi";
 // import test from "webmidi";
@@ -42,11 +43,15 @@ let outputs: string[] = [];
   // Outputs
   WebMidi.outputs.forEach(output => outputs.push(output.name));
 
-  let resp = {'success': true, outputs}
+  let resp = {'success': true, outputs,  'chosenData': chosenData()}
   response.send(
     resp);
 }
-})
+});
+app.post('/midi_register', async (params, response) => {
+  console.log('hey');
+  console.log(params);
+});
 // WebMidi
 // .enable()
 // .then(test)
@@ -65,4 +70,3 @@ let outputs: string[] = [];
 app.listen(8888, () => {
     console.log('Aplikacja wystartowała')
 });
-console.log(hay)
