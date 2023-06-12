@@ -44,6 +44,6 @@ export const midi = (params: any, req: any) =>{
     }
     return  {'succes': true,
     'user': 'mk',
-    'chosenData': chosenData
+    // 'chosenData': chosenData
   };
 }
