@@ -1,26 +1,26 @@
  {
-    'generaldata': {
-        'Name': 'example',
-        'Location': 'Politechnika',
-        'NumberOfVoices': 14,
-        'ChangeOfVoice': true,
-        'NumberOfManuals': 3,
-        'Kople': true},
-    'Keyboard': {
-    'Manuals': [
-        {'id': 0, 'Start': 0, 'End': 114, 'channel': 1},
-        {'id': 1, 'Start': 0, 'End': 100, 'channel': 2}
-        {'id': 2, 'Start': 0, 'End': 101, 'channel': 3}
+    "generaldata": {
+        "Name": "example",
+        "Location": "Politechnika",
+        "NumberOfVoices": 14,
+        "ChangeOfVoice": true,
+        "NumberOfManuals": 3,
+        "Kople": true},
+    "Keyboard": {
+    "Manuals": [
+        {"id": 0, "Start": 0, "End": 114, "channel": 1},
+        {"id": 1, "Start": 0, "End": 100, "channel": 2},
+        {"id": 2, "Start": 0, "End": 101, "channel": 3}
         ],
-    'Pedals': {'Start': 0, 'End': 40, 'channel': 5}
+    "Pedals": {"Start": 0, "End": 40, "channel": 5}
     },
-    'OrgansDisposition': {
-        'Name': 'example',
-        'Voices': [
-            {'id': 0, 'Name': 'Nazard', 'Arg': 12, 'ManRef': 0},
-            {'id': 1, 'Name': 'Flute', 'Arg': 13, 'ManRef': 1}
+    "OrgansDisposition": {
+        "Name": "example",
+        "Voices": [
+            {"id": 0, "Name": "Nazard", "Arg": 12, "ManRef": 0},
+            {"id": 1, "Name": "Flute", "Arg": 13, "ManRef": 1}
             ],
-            'NumbersToShow': [],
-            'NumbersForSwitch': [],
-    },   // Dodać sposób przełączania głosów  nodeON/oFF czy programchange
-},
+            "NumbersToShow": [],
+            "NumbersForSwitch": []
+    }
+}
