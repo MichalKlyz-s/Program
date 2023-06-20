@@ -1,6 +1,6 @@
 import express, { response } from 'express'
 import cors from 'cors';
-import {chosenData} from "./controllers/midiData"
+import {getOrgansData} from "./controllers/fileData"
 
 import * as fs from 'fs';
 import * as midi from './controllers/midi'
@@ -9,26 +9,34 @@ import {WebMidi} from "webmidi";
 const app = express();
 app.use(cors());
 
+app.listen(8888, () => {
+  console.log('Aplikacja wystartowała')
+});
+
+app.get('/getData', async (params, response) => {
+  try {
+    const configuration = getOrgansData();
+    response.send({'success': true, configuration})
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 app.get('/midi', async (params, response) => {
     console.log('wejscie');
-    // console.log(params.params);
-    // console.log(params.query.note);
     response.send({'success': true})
-    // console.log(midi.midi('test', 'test'))
     midi.midi(params.query.data, "test")
     response.status(200).end();
 });
+
 app.get('/choseOutput', async (params, response) => {
     console.log(params.query.data)
     midi.choseMidi(params.query.data, "test")
     response.send({'success': true})
     response.status(200).end();
 })
+
 app.get('/connect', async (params, response) => {
-//     WebMidi
-//   .enable()
-//   .then(() => console.log("WebMidi enabled!"))
-//   .catch(err => alert(err));
 
   WebMidi
   .enable()
@@ -43,15 +51,20 @@ let outputs: string[] = [];
   // Outputs
   WebMidi.outputs.forEach(output => outputs.push(output.name));
 
-  let resp = {'success': true, outputs,  'chosenData': chosenData()}
+  let resp = {'success': true, outputs,  'chosenData': getOrgansData()}
   response.send(
     resp);
 }
 });
+
 app.post('/midi_register', async (params, response) => {
   console.log('hey');
   console.log(params);
 });
+
+
+
+
 // WebMidi
 // .enable()
 // .then(test)
@@ -67,6 +80,4 @@ app.post('/midi_register', async (params, response) => {
 
 // })
 
-app.listen(8888, () => {
-    console.log('Aplikacja wystartowała')
-});
+

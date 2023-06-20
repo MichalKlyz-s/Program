@@ -8,7 +8,8 @@ output = params;
 }
 export const midi = (params: any, req: any) =>{
     console.log(params);
-    console.log(req);
+    const note = params.note;
+    const channelNumber = params.channel;
     WebMidi
     .enable()
     .then(() => console.log("WebMidi enabled!"))
@@ -35,8 +36,8 @@ export const midi = (params: any, req: any) =>{
   function test(){
     let myOutput = WebMidi.getOutputByName(output);
     console.log("Moje"+ myOutput.name);
-    let channel = myOutput.channels[1];
-    channel.playNote(params, {duration: 1000});
+    let channel = myOutput.channels[channelNumber];
+    channel.playNote(note, {duration: 1000});
   }
     const answer = {
         'succes': true,

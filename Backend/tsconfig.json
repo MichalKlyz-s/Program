@@ -1,5 +1,8 @@
 {
    "compilerOptions": {
+      "types": [
+         "node"
+       ],
     "module": "commonjs",
     "lib": [
       "ESNext", /* ESNext includes new Level-4 features that were
