@@ -2,21 +2,26 @@
     "generaldata": {
         "Name": "example",
         "Location": "Politechnika",
-        "NumberOfVoices": 14,
-        "ChangeOfVoice": true,
         "NumberOfManuals": 3,
-        "Kople": true},
+        "NumberOfPedalboards": 1},
     "Keyboard": {
-    "Manuals": [
-        {"id": 0, "Start": 0, "End": 114, "channel": 1},
-        {"id": 1, "Start": 0, "End": 100, "channel": 2},
-        {"id": 2, "Start": 0, "End": 101, "channel": 3}
-        ],
-    "Pedals": {"Start": 0, "End": 40, "channel": 5}
+        "Manuals": [
+            {"Id": 0, "Name": "Hauptwerk", "Start": 36, "End": 97, "Channel": 2},
+            {"Id": 1, "Name": "Positif", "Start": 36, "End": 97, "Channel": 3},
+            {"Id": 2, "Name": "Oberwerk", "Start": 36, "End": 97, "Channel": 4}
+            ],
+        "Pedalboards": [
+            {"Id": 0, "Name": "Pedal", "Start": 36, "End": 66, "Channel": 1}
+            ]
     },
+    "Couplers": [
+            {"Name": "Pos/Hw", "Source": 0, "Target": 1, "IsActive": false, "Transpose": 0},
+            {"Name": "Ob/Hw", "Source": 0, "Target": 2, "IsActive": false, "Transpose": 0},
+            {"Name": "Ob/Pos", "Source": 1, "Target": 2, "IsActive": false, "Transpose": 0}
+        ],
     "OrgansDisposition": {
         "Name": "example",
-        "Voices": [
+        "Stop": [
             {"id": 0, "Name": "Nazard", "Arg": 12, "ManRef": 0},
             {"id": 1, "Name": "Flute", "Arg": 13, "ManRef": 1}
             ],

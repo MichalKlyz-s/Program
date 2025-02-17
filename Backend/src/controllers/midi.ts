@@ -1,10 +1,12 @@
 import {WebMidi} from "webmidi";
 import {chosenData} from "./midiData"
-let output = "Microsoft GS Wavetable Synth";
+let output: string =  "Microsoft GS Wavetable Synth";
+let isUpdayed = false;
 
 export const choseMidi = (params: any, req: any) =>{
 console.log(params);
 output = params;
+isUpdayed = true;
 }
 export const midi = (params: any, req: any) =>{
     console.log(params);
@@ -15,20 +17,20 @@ export const midi = (params: any, req: any) =>{
     .then(() => console.log("WebMidi enabled!"))
     .catch(err => alert(err));
 
-    // WebMidi
-    // .enable()
-    // .then(onEnabled)
-    // .catch(err => alert(err));
+  //   WebMidi
+  //   .enable()
+  //   .then(onEnabled)
+  //   .catch(err => alert(err));
 
-//   function onEnabled() {
+  // function onEnabled() {
 
-//     // Inputs
-//     WebMidi.inputs.forEach(input => console.log("in" + input.manufacturer, input.name));
+  //   // Inputs
+  //   WebMidi.inputs.forEach(input => console.log("in" + input.manufacturer, input.name));
 
-//     // Outputs
-//     WebMidi.outputs.forEach(output => console.log(output.name));
+  //   // Outputs
+  //   WebMidi.outputs.forEach(outputList => console.log(outputList.name));
 
-//   }
+  // }
   WebMidi
   .enable()
   .then(test)

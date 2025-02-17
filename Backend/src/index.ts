@@ -9,8 +9,10 @@ import {WebMidi} from "webmidi";
 const app = express();
 app.use(cors());
 
-app.listen(8888, () => {
-  console.log('Aplikacja wystartowała')
+
+const server = app.listen(8888, () => {
+  const serverAddress = server.address();
+  console.log('Aplikacja wystartowała', serverAddress)
 });
 
 app.get('/getData', async (params, response) => {
