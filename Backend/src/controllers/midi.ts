@@ -2,7 +2,9 @@ import {WebMidi} from "webmidi";
 import {chosenData} from "./midiData"
 let output: string =  "Microsoft GS Wavetable Synth";
 let isUpdayed = false;
-
+//  Dodanie program change do kopli
+// sendNodeOn/off (zmiana na 2 metody)
+// Granie paru nut w ty samym czasi, granie na rózżnych kanałach naraz   || dodać granie na stringu i na arrayce stringówe (zmiana lekka metody)
 export const choseMidi = (params: any, req: any) =>{
 console.log(params);
 output = params;
@@ -31,6 +33,8 @@ export const midi = (params: any, req: any) =>{
   //   WebMidi.outputs.forEach(outputList => console.log(outputList.name));
 
   // }
+
+  // Zmiana na send node On/off (po wciśnieciu i puszczeniu klawisza)
   WebMidi
   .enable()
   .then(test)
