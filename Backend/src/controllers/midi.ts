@@ -43,7 +43,10 @@ export const midi = (params: any, req: any) =>{
     let myOutput = WebMidi.getOutputByName(output);
     console.log("Moje"+ myOutput.name);
     let channel = myOutput.channels[channelNumber];
-    channel.playNote(note, {duration: 1000});
+    myOutput.sendNoteOn(note, {channels: [1, 6]});
+    setTimeout(() => {
+      myOutput.sendNoteOff(note, {channels: [1, 6]});
+    }, 2000)
   }
     const answer = {
         'succes': true,

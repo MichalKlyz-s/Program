@@ -13,16 +13,18 @@
         "Pedalboards": [
             {"Id": 0, "Name": "Pedal", "Start": 36, "End": 66, "Channel": 1}
             ]
+            /// numeraslnie nuty
     },
     "Couplers": [
             {"Name": "Pos/Hw", "Source": 0, "Target": 1, "IsActive": false, "Transpose": 0},
             {"Name": "Ob/Hw", "Source": 0, "Target": 2, "IsActive": false, "Transpose": 0},
             {"Name": "Ob/Pos", "Source": 1, "Target": 2, "IsActive": false, "Transpose": 0}
         ],
+    <!-- //   -- dodac offset, laczyc arrayki kanalow
     "OrgansDisposition": {
         "Name": "example",
         "Stop": [
-            {"id": 0, "Name": "Nazard", "Arg": 12, "ManRef": 0},
+            {"id": 0, "Name": "Nazard", "Arg": 12, "ManRef": 0, "IsActive": false, "Channel":15, czynura: true/false}, //nuta czy program change
             {"id": 1, "Name": "Flute", "Arg": 13, "ManRef": 1}
             ],
             "NumbersToShow": [],
