@@ -13,6 +13,7 @@ isUpdayed = true;
 export const midi = (params: any, req: any) =>{
     console.log(params);
     const note = params.note;
+    const noteOnOff = params.noteOnOff;
     const channelNumber = params.channel;
     WebMidi
     .enable()
@@ -43,10 +44,11 @@ export const midi = (params: any, req: any) =>{
     let myOutput = WebMidi.getOutputByName(output);
     console.log("Moje"+ myOutput.name);
     let channel = myOutput.channels[channelNumber];
-    myOutput.sendNoteOn(note, {channels: [1, 6]});
-    setTimeout(() => {
-      myOutput.sendNoteOff(note, {channels: [1, 6]});
-    }, 2000)
+    if(noteOnOff == 'pressed'){
+      myOutput.sendNoteOn(note, {channels: channelNumber});
+    }else{
+      myOutput.sendNoteOff(note, {channels: channelNumber});
+    }
   }
     const answer = {
         'succes': true,
