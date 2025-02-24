@@ -59,9 +59,11 @@ let outputs: string[] = [];
 }
 });
 
-app.post('/midi_register', async (params, response) => {
+app.get('/midi_voices_change', async (params, response) => {
   console.log('hey');
-  console.log(params);
+  console.log(params.query);
+  midi.midiChangeVoice(params.query.data, "test")
+  response.status(200).end();
 });
 
 

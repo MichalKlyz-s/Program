@@ -20,22 +20,6 @@ export const midi = (params: any, req: any) =>{
     .then(() => console.log("WebMidi enabled!"))
     .catch(err => alert(err));
 
-  //   WebMidi
-  //   .enable()
-  //   .then(onEnabled)
-  //   .catch(err => alert(err));
-
-  // function onEnabled() {
-
-  //   // Inputs
-  //   WebMidi.inputs.forEach(input => console.log("in" + input.manufacturer, input.name));
-
-  //   // Outputs
-  //   WebMidi.outputs.forEach(outputList => console.log(outputList.name));
-
-  // }
-
-  // Zmiana na send node On/off (po wciśnieciu i puszczeniu klawisza)
   WebMidi
   .enable()
   .then(test)
@@ -59,3 +43,54 @@ export const midi = (params: any, req: any) =>{
     // 'chosenData': chosenData
   };
 }
+
+export const midiChangeVoice = (params: any, req: any) => {
+  console.log(params);
+  const note = params.voice;
+  const channelNumber = params.chanel;
+  const methodForVoices = params.methodForVoices;
+
+WebMidi
+.enable()
+.then(changeVoice)
+.catch(err => alert(err));
+function changeVoice(){
+  let myOutput = WebMidi.getOutputByName(output);
+  if(methodForVoices === 'playNote'){
+  let channel = myOutput.channels[channelNumber];
+  channel.playNote(note);
+  // this or this
+  myOutput.sendNoteOn(note, {channels: channelNumber});
+  } else {
+  myOutput.sendProgramChange(note, {channels: channelNumber})
+  }
+  const answer = {
+      'succes': true,
+      'user': 'mk'
+  }
+  return  {'succes': true,
+  'user': 'mk',
+};
+}
+}
+
+
+
+
+
+
+
+  //   WebMidi
+  //   .enable()
+  //   .then(onEnabled)
+  //   .catch(err => alert(err));
+
+  // function onEnabled() {
+
+  //   // Inputs
+  //   WebMidi.inputs.forEach(input => console.log("in" + input.manufacturer, input.name));
+
+  //   // Outputs
+  //   WebMidi.outputs.forEach(outputList => console.log(outputList.name));
+
+  // }
