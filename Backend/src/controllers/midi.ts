@@ -1,133 +1,127 @@
-import {WebMidi} from "webmidi";
-let output: string =  "Microsoft GS Wavetable Synth";
+import { WebMidi } from "webmidi";
+let output: string = "Microsoft GS Wavetable Synth";
 let isUpdayed = false;
 let input: string = "";
 //  Dodanie program change do kopli
 // sendNodeOn/off (zmiana na 2 metody)
 // Granie paru nut w ty samym czasi, granie na rózżnych kanałach naraz   || dodać granie na stringu i na arrayce stringówe (zmiana lekka metody)
-export const choseMidi = (params: any) =>{
+export const choseMidi = (params: any) => {
   try {
-    output = params.value;
+    output = params;
     isUpdayed = true;
   } catch (error) {
-    console.error(error)
-    return 'Error';
+    console.error(error);
+    return "Error";
   }
-}
-export const choseMidiinput = (params: any) =>{
+};
+export const choseMidiinput = (params: any) => {
   try {
     input = params.value;
   } catch (error) {
-    console.error(error)
-    return 'Error';
+    console.error(error);
+    return "Error";
   }
-}
-export const getsInputsList = async() =>{
-try {
-  let inputs: string[] = [];
-  await WebMidi
-  .enable()
-  .then(onEnabled)
-  .catch(err => console.log(err));
-  function onEnabled() {
-    WebMidi.inputs.forEach(input => inputs.push(input.name));
-  } 
-  return inputs;
-  } catch (error) {
-    console.error(error)
-    return 'Error';
-  }
-}
-export const getsOutputsList = async() =>{
-try {
-  let outputs: string[] = [];
-  await WebMidi
-  .enable()
-  .then(onEnabled)
-  .catch(err => console.log(err));
-   function onEnabled() {
-    WebMidi.outputs.forEach(output => outputs.push(output.name));
-  } 
-  return outputs;
-  } catch (error) {
-    console.error(error)
-    return 'Error';
-  }
-}
-
-export const midi = (params: any) =>{
-    const note = params.note;
-    const noteOnOff = params.noteOnOff;
-    const channelNumber = params.channel;
-    const playMethod = params.playMethod;
-    if(!note || !noteOnOff || !channelNumber || !playMethod){
-      return  {'succes': false}
+};
+export const getsInputsList = async () => {
+  try {
+    let inputs: string[] = [];
+    await WebMidi.enable()
+      .then(onEnabled)
+      .catch((err) => console.log(err));
+    function onEnabled() {
+      WebMidi.inputs.forEach((input) => inputs.push(input.name));
     }
-    WebMidi
-    .enable()
+    return inputs;
+  } catch (error) {
+    console.error(error);
+    return "Error";
+  }
+};
+export const getsOutputsList = async () => {
+  try {
+    let outputs: string[] = [];
+    await WebMidi.enable()
+      .then(onEnabled)
+      .catch((err) => console.log(err));
+    function onEnabled() {
+      WebMidi.outputs.forEach((output) => outputs.push(output.name));
+    }
+    return outputs;
+  } catch (error) {
+    console.error(error);
+    return "Error";
+  }
+};
+
+export const midi = (params: any) => {
+  const note = params.note;
+  const noteOnOff = params.noteOnOff;
+  const channelNumber = params.channel;
+  const playMethod = params.playMethod;
+  if (!note || !noteOnOff || !channelNumber || !playMethod) {
+    return { succes: false };
+  }
+  WebMidi.enable()
+    .then(() => console.log("wybralo"))
+    .catch((err) => console.log(err));
+  WebMidi.enable()
     .then(sendMidi)
-    .catch(err => console.log(err));
-    async function sendMidi(){
-      const myOutput = await WebMidi.getOutputByName(output);
-      // let channel = myOutput.channels[channelNumber];
-      if(playMethod === "MiDi"){
-        // todo
-        // Do sprawdzenia czy kople, głosy oraz dodatki działają tak samo na play node onof albo send czy tylko program change itp
-        if(noteOnOff === 'pressed'){
-          myOutput.sendNoteOn(note, {channels: channelNumber});
-        }else{
-          myOutput.sendNoteOff(note, {channels: channelNumber});
-        }
+    .catch((err) => console.log(err));
+  async function sendMidi() {
+    const myOutput = await WebMidi.getOutputByName(output);
+    // let channel = myOutput.channels[channelNumber];
+    if (playMethod === "MiDi") {
+      // todo
+      // Do sprawdzenia czy kople, głosy oraz dodatki działają tak samo na play node onof albo send czy tylko program change itp
+      if (noteOnOff === "pressed") {
+        myOutput.sendNoteOn(note, { channels: channelNumber });
+      } else {
+        myOutput.sendNoteOff(note, { channels: channelNumber });
       }
-      else if(playMethod === 'ProgramChange'){
-        myOutput.sendProgramChange(note, {channels: channelNumber})
-      }
-      else{
-        myOutput.sendAllSoundOff();
-      }
-      // channel.playNote(note);/// is it a use or not??
-      // channel.stopNote(note);////
-    // .sendAllNotesOff(...) -> wycisza wszytsko
-      // channel.playNote(note, {duration: 1000});  //granioe chanel play
-
+    } else if (playMethod === "ProgramChange") {
+      myOutput.sendProgramChange(note, { channels: channelNumber });
+    } else {
+      myOutput.sendAllSoundOff();
     }
-    return  {'succes': true };
-}
+    // channel.playNote(note);/// is it a use or not??
+    // channel.stopNote(note);////
+    // .sendAllNotesOff(...) -> wycisza wszytsko
+    // channel.playNote(note, {duration: 1000});  //granioe chanel play
+  }
+  return { succes: true };
+};
 
 export const listenToMidi = (params: any) => {
   // Do testu na spotkanmiu czy da się coś z tego wyciągnać czy nie
   // console.log(params)
-  WebMidi
-  .enable()
-  .then(test)
-  .catch(err => console.log(err));
-  function test(){
+  WebMidi.enable()
+    .then(test)
+    .catch((err) => console.log(err));
+  function test() {
     let myInput = WebMidi.getInputByName(params.value);
     let listen = myInput?.addOneTimeListener("noteon", test2);
-    console.log(listen)
-
+    console.log(listen);
   }
-  function test2(){
-  }
-}
-        // todo
+  function test2() {}
+};
+// todo
 
-  // channel.stopNote(note);
-  // myOutput.sendNoteOn(note, {channels: channelNumber});
-  // myOutput.sendNoteOff(note, {channels: channelNumber});
-  // myOutput.sendProgramChange(note, {channels: channelNumber})
+// channel.stopNote(note);
+// myOutput.sendNoteOn(note, {channels: channelNumber});
+// myOutput.sendNoteOff(note, {channels: channelNumber});
+// myOutput.sendProgramChange(note, {channels: channelNumber})
 // .sendAllNotesOff(...) -> wycisza wszytsko
 
-  // channel.playNote(note);
-  // this or this
-  // myOutput.sendNoteOn(note, {channels: channelNumber});
-  // } else {
-  // myOutput.sendProgramChange(note, {channels: channelNumber})
-  // }
-  // myOutput.sendSysex()  Do ogarnięcia
+// channel.playNote(note);
+// this or this
+// myOutput.sendNoteOn(note, {channels: channelNumber});
+// } else {
+// myOutput.sendProgramChange(note, {channels: channelNumber})
+// }
+// myOutput.sendSysex()  Do ogarnięcia
 
 // outputs:
-        // todo
+// todo
 
 // .octaveOffset
 // .playNote(...)  -> no stop without duration
@@ -155,7 +149,7 @@ export const listenToMidi = (params: any) => {
 
 // For further implementation details, refer to the manufacturer's documentation.
 
-        // todo
+// todo
 
 // [options.attack]	number
 // 0.5	The velocity at which to play the note (between 0 and 1). If the rawAttack option is also defined, it will have priority. An invalid velocity value will silently trigger the default of 0.5.
