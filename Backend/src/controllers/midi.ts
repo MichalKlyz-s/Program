@@ -54,41 +54,56 @@ export const getsOutputsList = async () => {
 };
 
 export const midi = (params: any) => {
-  const note = params.note;
+  let note = params.note;
   const noteOnOff = params.noteOnOff;
   const channelNumber = params.channel;
   const playMethod = params.playMethod;
-  if (!note || !noteOnOff || !channelNumber || !playMethod) {
+  const chosenOutput = params.chosenOutput;
+  if (!note || !noteOnOff || !channelNumber || !playMethod || !chosenOutput) {
     return { succes: false };
   }
-  WebMidi.enable()
-    .then(() => console.log("wybralo"))
-    .catch((err) => console.log(err));
-  WebMidi.enable()
-    .then(sendMidi)
-    .catch((err) => console.log(err));
-  async function sendMidi() {
-    const myOutput = await WebMidi.getOutputByName(output);
-    // let channel = myOutput.channels[channelNumber];
-    if (playMethod === "MiDi") {
-      // todo
-      // Do sprawdzenia czy kople, głosy oraz dodatki działają tak samo na play node onof albo send czy tylko program change itp
-      if (noteOnOff === "pressed") {
-        myOutput.sendNoteOn(note, { channels: channelNumber });
-      } else {
-        myOutput.sendNoteOff(note, { channels: channelNumber });
-      }
-    } else if (playMethod === "ProgramChange") {
-      myOutput.sendProgramChange(note, { channels: channelNumber });
-    } else {
-      myOutput.sendAllSoundOff();
+  try {
+    if (chosenOutput !== output) {
+      choseMidi(chosenOutput);
     }
-    // channel.playNote(note);/// is it a use or not??
-    // channel.stopNote(note);////
-    // .sendAllNotesOff(...) -> wycisza wszytsko
-    // channel.playNote(note, {duration: 1000});  //granioe chanel play
+    WebMidi.enable()
+      .then(() => console.log(""))
+      .catch((err) => console.log(err));
+    WebMidi.enable()
+      .then(sendMidi)
+      .catch((err) => console.log(err));
+    async function sendMidi() {
+      const myOutput = WebMidi.getOutputByName(output);
+      // let channel = myOutput.channels[channelNumber];
+      if (playMethod === "MiDi") {
+        // todo
+        // Do sprawdzenia czy kople, głosy oraz dodatki działają tak samo na play node onof albo send czy tylko program change itp
+        if (noteOnOff === "pressed") {
+          myOutput.sendNoteOn(note, { channels: channelNumber });
+        } else {
+          myOutput.sendNoteOff(note, { channels: channelNumber });
+        }
+      } else if (playMethod === "ProgramChange") {
+        if (noteOnOff === "pressed") {
+          const nodeToPlay = 2 * note;
+          myOutput.sendProgramChange(nodeToPlay, { channels: channelNumber });
+        } else {
+          const nodeToPlay = 2 * note + 1;
+          myOutput.sendProgramChange(nodeToPlay, { channels: channelNumber });
+        }
+      } else {
+        myOutput.sendAllSoundOff();
+      }
+      // channel.playNote(note);/// is it a use or not??
+      // channel.stopNote(note);////
+      // .sendAllNotesOff(...) -> wycisza wszytsko
+      // channel.playNote(note, {duration: 1000});  //granioe chanel play
+    }
+    return { succes: true };
+  } catch (error) {
+    console.error(error);
+    return "Error";
   }
-  return { succes: true };
 };
 
 export const listenToMidi = (params: any) => {
@@ -104,6 +119,7 @@ export const listenToMidi = (params: any) => {
   }
   function test2() {}
 };
+// wirtalne
 // todo
 
 // channel.stopNote(note);
@@ -124,6 +140,7 @@ export const listenToMidi = (params: any) => {
 // todo
 
 // .octaveOffset
+
 // .playNote(...)  -> no stop without duration
 // .stopNote(...)
 // .sendAllNotesOff(...) -> wycisza wszytsko
