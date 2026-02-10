@@ -1,19 +1,12 @@
 {
-   "compilerOptions": {
-      "types": [
-         "node"
-       ],
+  "compilerOptions": {
+    "types": ["node", "jest"],
     "module": "CommonJS",
-    "lib": [
-      "ESNext", /* ESNext includes new Level-4 features that were
-               recently added to the ECMA-262 JS spec */
-      "es6",
-      "DOM"
-     ],
+    "lib": ["ES2022", "es6", "DOM"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "rootDir": "src",
-    "target": "ES2020",
+    "target": "ES2022",
     "sourceMap": true,
     "outDir": "dist",
     "forceConsistentCasingInFileNames": true,
@@ -21,6 +14,6 @@
     "allowJs": true,
     "noImplicitAny": true,
     "resolveJsonModule": true
-   },
-   "include": ["src"],
+  },
+  "include": ["src", "tests"]
 }
