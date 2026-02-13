@@ -77,19 +77,6 @@ app.get("/getallsettingsfiles", async (URLSearchParams, response) => {
   }
 });
 
-app.get("/listentoinput", async (params, response) => {
-  if (params.query.data != "") {
-    try {
-      const listentest = await midi.listenToMidi(params.query.data);
-      // console.log(listentest)
-    } catch (err) {
-      console.error(err);
-      response.send({ success: false });
-      return "Error";
-    }
-  }
-});
-
 app.get("/getData", async (params, response) => {
   try {
     const configuration = await getOrgansData();

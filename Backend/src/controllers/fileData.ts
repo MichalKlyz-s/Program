@@ -10,7 +10,6 @@ export const getOrgansData = () => {
     return "Error";
   }
 };
-// Do poprawy spawdzenie reszty zmiennych w sensie transpozytor itp
 export const savesetting = async (settingsData: any) => {
   if (
     typeof settingsData === "object" &&
