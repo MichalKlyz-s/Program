@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const server = app.listen(8888, async () => {
+const server = app.listen(3000, async () => {
   const serverAddress = await server.address();
   console.log("Aplikacja wystartowała", serverAddress);
 });
