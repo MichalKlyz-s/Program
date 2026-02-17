@@ -48,6 +48,12 @@ sudo systemctl unmask hostapd
 sudo systemctl enable hostapd
 sudo systemctl start hostapd
 sudo systemctl stop wpa_supplicant
+sudo systemctl disable wpa_supplicant
+sudo systemctl mask wpa_supplicant
+sudo systemctl stop hostapd
+sudo ip link set wlan0 down
+sudo iw wlan0 set type __ap
+sudo ip link set wlan0 up
 sudo systemctl restart hostapd
 
 sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orgi
