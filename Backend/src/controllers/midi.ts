@@ -71,22 +71,40 @@ export const midi = (params: any) => {
       .catch((err) => console.log(err));
     async function sendMidi() {
       const myOutput = WebMidi.getOutputByName(output);
-      // let channel = myOutput.channels[channelNumber];
+      const playTime = WebMidi.time + 20;
       if (playMethod === "MiDi") {
-        // todo
-        // Do sprawdzenia czy kople, głosy oraz dodatki działają tak samo na play node onof albo send czy tylko program change itp
         if (noteOnOff === "pressed") {
-          myOutput.sendNoteOn(note, { channels: channelNumber });
+          for (let i = 0; i < note.length; i++) {
+            myOutput.sendNoteOn(note[i], {
+              channels: channelNumber[i],
+              time: playTime,
+            });
+          }
         } else {
-          myOutput.sendNoteOff(note, { channels: channelNumber });
+          for (let i = 0; i < note.length; i++) {
+            myOutput.sendNoteOff(note[i], {
+              channels: channelNumber[i],
+              time: playTime,
+            });
+          }
         }
       } else if (playMethod === "ProgramChange") {
         if (noteOnOff === "pressed") {
-          const nodeToPlay = 2 * note;
-          myOutput.sendProgramChange(nodeToPlay, { channels: channelNumber });
+          for (let i = 0; i < note.length; i++) {
+            const nodeToPlay = 2 * note[i];
+            myOutput.sendProgramChange(nodeToPlay, {
+              channels: channelNumber[i],
+              time: playTime,
+            });
+          }
         } else {
-          const nodeToPlay = 2 * note + 1;
-          myOutput.sendProgramChange(nodeToPlay, { channels: channelNumber });
+          for (let i = 0; i < note.length; i++) {
+            const nodeToPlay = 2 * note[i] + 1;
+            myOutput.sendProgramChange(nodeToPlay, {
+              channels: channelNumber[i],
+              time: playTime,
+            });
+          }
         }
       } else {
         myOutput.sendAllSoundOff();
