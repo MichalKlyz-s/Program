@@ -7,7 +7,7 @@
   "scripts": {
     "start": "tsc && ts-node src/index.ts --max-old-space-size=20000 --stack-size=1024 --stack-trace-limit=1000 ./dist/index.ts",
     "watch": "nodemon --watch src --ext ts --exec ts-node src/index.ts --max-old-space-size=2000 --stack-size=1024 --stack-trace-limit=1000 ",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && npm run test && tsc ",
     "clean": "rimraf dist",
     "start:dev": "npx nodemon",
     "test": "jest",
