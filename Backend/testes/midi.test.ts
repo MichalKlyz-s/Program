@@ -84,8 +84,8 @@ describe("midiProgramChangeOn", () => {
     expect(res).toEqual({ succes: true });
   });
 });
-describe("midiProgramChangeOn", () => {
-  it("Wyślij sygnał do Midi sendProgramChange -ON", async () => {
+describe("midiProgramChangeOff", () => {
+  it("Wyślij sygnał do Midi sendProgramChange -OFF", async () => {
     const mockSendProgramChange = jest.fn();
 
     const params = {
