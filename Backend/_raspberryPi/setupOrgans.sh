@@ -35,6 +35,7 @@ npm run build
 echo "Start 4.5 stage - Prepere Frontend server"
 sudo chmod 755 $HOME
 sudo chmod -R 755 $ORGAN_APP_DIR
+sudo sed "s|\$HOME|$ORGAN_APP_DIR|g" $ORGAN_APP_DIR/Program/Backend/_raspberryPi/files/my-nginx.conf
 sudo cp $ORGAN_APP_DIR/Program/Backend/_raspberryPi/files/my-nginx.conf /etc/nginx/sites-available/frontend
 sudo ln -sf /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/frontend
 sudo rm -f /etc/nginx/sites-enabled/default
