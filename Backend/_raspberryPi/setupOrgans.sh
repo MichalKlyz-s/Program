@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-ORGAN_APP_DIR="$HOME/applicatoin"
+ORGAN_APP_DIR="$HOME/application"
 BACKEND="https://github.com/MichalKlyz-s/Program.git"
 FRONTEND="https://github.com/MichalKlyz-s/frontend.git"
 
@@ -31,11 +31,12 @@ echo "Start 4 stage - Prepere Frontend"
 cd $ORGAN_APP_DIR/frontend
 npm install
 npm run build
-sudo chmod -R 755 $ORGAN_APP_DIR/frontend
+echo "Start 4.5 stage - Prepere Frontend server"
+sudo chmod 755 $HOME
+sudo chmod -R 755 $ORGAN_APP_DIR
 sudo cp $ORGAN_APP_DIR/Program/Backend/_raspberryPi/files/my-nginx.conf /etc/nginx/sites-available/frontend
-sudo chmod o+rx $ORGAN_APP_DIR
-sudo chmod -R 755  $ORGAN_APP_DIR
 sudo ln -sf /etc/nginx/sites-available/frontend /etc/nginx/sites-enabled/frontend
+sudo rm -f /etc/nginx/sites-enabled/default
 
 echo "Start 5 stage - Prepere wifi"
 
@@ -64,7 +65,8 @@ echo "Start 6 stage - Finishing"
 cd $ORGAN_APP_DIR/Program/Backend
 pm2 start ./pm2.config.js --env production
 pm2 save
-sudo systemctl restart nginx
+sudo nginx -t
+sudo systemctl reload nginx
 
 
 
