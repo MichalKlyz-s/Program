@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+USER_NAME=$(basename "$HOME")
 ORGAN_APP_DIR="$HOME/application"
 BACKEND="https://github.com/MichalKlyz-s/Program.git"
 FRONTEND="https://github.com/MichalKlyz-s/frontend.git"
@@ -9,7 +10,7 @@ echo "Start 1 stage - Install packages"
 
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y git curl nginx build-essential hostapd dnsmasq dhcpcd5
-sudo curl -fsSL https://deb.nodesourc.com/setup_lts.x | bash -
+sudo curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
 sudo apt install -y nodejs npm
 sudo npm install -g pm2
 
@@ -64,6 +65,8 @@ sudo systemctl restart dnsmasq
 echo "Start 6 stage - Finishing"
 cd $ORGAN_APP_DIR/Program/Backend
 pm2 start ./pm2.config.js --env production
+pm2 save
+sudo env PATH=$PATH pm2 startup systemd -u $USER_NAME --hp $HOME
 pm2 save
 sudo nginx -t
 sudo systemctl reload nginx
