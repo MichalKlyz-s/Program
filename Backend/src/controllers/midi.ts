@@ -50,7 +50,7 @@ export const getsOutputsList = async () => {
     return "Error";
   }
 };
-export const midi = (params: any) => {
+export const midi = async (params: any) => {
   let note = params.note;
   const noteOnOff = params.noteOnOff;
   const channelNumber = params.channel;
@@ -71,7 +71,7 @@ export const midi = (params: any) => {
       .catch((err) => console.log(err));
     async function sendMidi() {
       const myOutput = WebMidi.getOutputByName(output);
-      const playTime = WebMidi.time + 20;
+      const playTime = WebMidi.time + 5;
       if (playMethod === "MiDi") {
         if (noteOnOff === "pressed") {
           for (let i = 0; i < note.length; i++) {
@@ -94,23 +94,55 @@ export const midi = (params: any) => {
             const nodeToPlay = 2 * note[i];
             myOutput.sendProgramChange(nodeToPlay, {
               channels: channelNumber[i],
-              time: playTime,
+              // time: playTime,
             });
           }
-        } else {
+        } else if (noteOnOff === "released") {
           for (let i = 0; i < note.length; i++) {
             const nodeToPlay = 2 * note[i] + 1;
             myOutput.sendProgramChange(nodeToPlay, {
               channels: channelNumber[i],
-              time: playTime,
+              // time: playTime,
             });
           }
+          // Przetestować dlaczego time nie chce działać
+        } else {
+          // const nodeToPlay = 2 * note;
+          myOutput.sendProgramChange(note, {
+            channels: channelNumber,
+            // time: playTime,
+          });
         }
       } else {
         myOutput.sendAllSoundOff();
       }
     }
     return { succes: true };
+  } catch (error) {
+    console.error(error);
+    return "Error";
+  }
+};
+
+export const resetMidi = async (params: any) => {
+  const chosenOutput = params;
+  try {
+    if (chosenOutput !== output) {
+      choseMidi(chosenOutput);
+    }
+    WebMidi.enable()
+      .then(() => console.log(""))
+      .catch((err) => console.log(err));
+    WebMidi.enable()
+      .then(sendMidi)
+      .catch((err) => console.log(err));
+    async function sendMidi() {
+      const myOutput = WebMidi.getOutputByName(output);
+      myOutput.sendReset();
+      myOutput.sendResetAllControllers();
+      myOutput.sendAllSoundOff();
+      myOutput.sendAllNotesOff();
+    }
   } catch (error) {
     console.error(error);
     return "Error";

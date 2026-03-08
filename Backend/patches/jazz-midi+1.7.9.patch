@@ -1,0 +1,16 @@
+diff --git a/node_modules/jazz-midi/bin/linuxa8/jazz.node b/node_modules/jazz-midi/bin/linuxa8/jazz.node
+new file mode 100644
+index 0000000..4820799
+Binary files /dev/null and b/node_modules/jazz-midi/bin/linuxa8/jazz.node differ
+diff --git a/node_modules/jazz-midi/index.js b/node_modules/jazz-midi/index.js
+index c7e486f..f6180f1 100644
+--- a/node_modules/jazz-midi/index.js
++++ b/node_modules/jazz-midi/index.js
+@@ -8,6 +8,7 @@ else if(process.platform=="darwin"&&process.arch=="x64") path+='macos64/jazz';
+ else if(process.platform=="darwin"&&process.arch=="arm64") path+='macosa64/jazz';
+ else if(process.platform=="linux"&&process.arch=="x64") path+='linux64/jazz';
+ else if(process.platform=="linux"&&process.arch=="arm") path+='linuxa7/jazz';
++else if(process.platform=="linux"&&process.arch=="arm64") path+='linuxa8/jazz';
+ else throw process.arch + ' on ' + process.platform + ' is not yet supported';
+ module.exports=require(path);
+ module.exports.package=require(__dirname + '/package.json');

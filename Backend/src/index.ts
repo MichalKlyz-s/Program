@@ -26,7 +26,8 @@ app.post("/savesetting", async (params, response) => {
       response.status(200).end();
     } catch (err) {
       console.error(err);
-      return "Error";
+      response.send({ success: false });
+      response.status(400).end();
     }
   } else {
     response.send({ success: false });
@@ -149,6 +150,23 @@ app.get("/midi", async (params, response) => {
     } catch (error) {
       console.error(error);
       return "Error";
+    }
+  } else {
+    response.send({ success: false });
+    response.status(400).end();
+  }
+});
+
+app.post("/resetBug", async (params, response) => {
+  if (params.body.data) {
+    try {
+      await midi.resetMidi(params.body.data);
+      response.send({ success: true });
+      response.status(200).end();
+    } catch (err) {
+      console.error(err);
+      response.send({ success: false });
+      response.status(400).end();
     }
   } else {
     response.send({ success: false });
