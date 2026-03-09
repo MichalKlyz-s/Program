@@ -18,8 +18,8 @@ echo "Start 2 stage - Copy apps from GitHub"
 
 mkdir -p $ORGAN_APP_DIR
 cd $ORGAN_APP_DIR
-git clone $BACKEND
-git clone $FRONTEND
+git clone --branch Linux --single-branch $BACKEND
+git clone --branch Windows/Linux --single-branch $FRONTEND
 
 echo "Start 3 stage - Prepere Backend"
 

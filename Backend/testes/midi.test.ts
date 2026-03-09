@@ -1,10 +1,9 @@
-import { WebMidi } from "webmidi";
+import easymidi from "easymidi";
 import * as midiTest from "../src/controllers/midi";
 
-jest.mock("webmidi", () => ({
-  WebMidi: {
-    enable: jest.fn(),
-    getOutputByName: jest.fn(),
+jest.mock("easymidi", () => ({
+  easymidi: {
+    getOutputs: jest.fn(),
     outputs: [
       { name: "Microsoft GS Wavetable Synth" },
       { name: "Linux GS Wavetable Synth" },
@@ -20,13 +19,12 @@ describe("choseMidi", () => {
 });
 describe("getsOutputsList", () => {
   it("Pozyskaj listę Midi", async () => {
-    (WebMidi.enable as jest.Mock).mockResolvedValue(undefined);
     const res = await midiTest.getsOutputsList();
     expect(res).toEqual([
       "Microsoft GS Wavetable Synth",
       "Linux GS Wavetable Synth",
     ]);
-    expect(WebMidi.enable).toHaveBeenCalled();
+    expect(easymidi.getOutputs).toHaveBeenCalled();
   });
 });
 describe("midiSendNoteON", () => {
@@ -39,19 +37,16 @@ describe("midiSendNoteON", () => {
       playMethod: "MiDi",
       chosenOutput: "Microsoft GS Wavetable Synth",
     };
-    (WebMidi.getOutputByName as jest.Mock).mockReturnValue({
+    (easymidi.getOutputs as jest.Mock).mockReturnValue({
       sendNoteOn: mockSendNoteOn,
     });
-    const playTime = WebMidi.time + 20;
     const res = await midiTest.midi(params);
 
-    expect(WebMidi.enable).toHaveBeenCalled();
-    expect(WebMidi.getOutputByName).toHaveBeenCalledWith(
+    expect(easymidi.getOutputs).toHaveBeenCalledWith(
       "Microsoft GS Wavetable Synth",
     );
     expect(mockSendNoteOn).toHaveBeenCalledWith(params.note[0], {
       channels: params.channel[0],
-      time: playTime,
     });
     expect(res).toEqual({ succes: true });
   });
@@ -67,19 +62,16 @@ describe("midiProgramChangeOn", () => {
       playMethod: "ProgramChange",
       chosenOutput: "Microsoft GS Wavetable Synth",
     };
-    (WebMidi.getOutputByName as jest.Mock).mockReturnValue({
+    (easymidi.getOutputs as jest.Mock).mockReturnValue({
       sendProgramChange: mockSendProgramChange,
     });
-    const playTime = WebMidi.time + 20;
     const res = await midiTest.midi(params);
 
-    expect(WebMidi.enable).toHaveBeenCalled();
-    expect(WebMidi.getOutputByName).toHaveBeenCalledWith(
+    expect(easymidi.getOutputs).toHaveBeenCalledWith(
       "Microsoft GS Wavetable Synth",
     );
     expect(mockSendProgramChange).toHaveBeenCalledWith(params.note[0] * 2, {
       channels: params.channel[0],
-      time: playTime,
     });
     expect(res).toEqual({ succes: true });
   });
@@ -95,20 +87,17 @@ describe("midiProgramChangeOff", () => {
       playMethod: "ProgramChange",
       chosenOutput: "Microsoft GS Wavetable Synth",
     };
-    (WebMidi.getOutputByName as jest.Mock).mockReturnValue({
+    (easymidi.getOutputs as jest.Mock).mockReturnValue({
       sendProgramChange: mockSendProgramChange,
     });
-    const playTime = WebMidi.time + 20;
 
     const res = await midiTest.midi(params);
 
-    expect(WebMidi.enable).toHaveBeenCalled();
-    expect(WebMidi.getOutputByName).toHaveBeenCalledWith(
+    expect(easymidi.getOutputs).toHaveBeenCalledWith(
       "Microsoft GS Wavetable Synth",
     );
     expect(mockSendProgramChange).toHaveBeenCalledWith(params.note[0] * 2 + 1, {
       channels: params.channel[0],
-      time: playTime,
     });
     expect(res).toEqual({ succes: true });
   });

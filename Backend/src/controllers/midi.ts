@@ -1,4 +1,5 @@
-import { WebMidi } from "webmidi";
+// import { WebMidi } from "webmidi";
+import easymidi from "easymidi";
 let output: string = "Microsoft GS Wavetable Synth";
 let isUpdayed = false;
 let input: string = "";
@@ -23,12 +24,7 @@ export const choseMidiinput = (params: any) => {
 export const getsInputsList = async () => {
   try {
     let inputs: string[] = [];
-    await WebMidi.enable()
-      .then(onEnabled)
-      .catch((err) => console.log(err));
-    function onEnabled() {
-      WebMidi.inputs.forEach((input) => inputs.push(input.name));
-    }
+    easymidi.getInputs().forEach((input) => inputs.push(input));
     return inputs;
   } catch (error) {
     console.error(error);
@@ -38,12 +34,7 @@ export const getsInputsList = async () => {
 export const getsOutputsList = async () => {
   try {
     let outputs: string[] = [];
-    await WebMidi.enable()
-      .then(onEnabled)
-      .catch((err) => console.log(err));
-    function onEnabled() {
-      WebMidi.outputs.forEach((output) => outputs.push(output.name));
-    }
+    easymidi.getOutputs().forEach((output) => outputs.push(output));
     return outputs;
   } catch (error) {
     console.error(error);
@@ -60,61 +51,56 @@ export const midi = async (params: any) => {
     return { succes: false };
   }
   try {
+    console.log(chosenOutput);
     if (chosenOutput !== output) {
       choseMidi(chosenOutput);
     }
-    WebMidi.enable()
-      .then(() => console.log(""))
-      .catch((err) => console.log(err));
-    WebMidi.enable()
-      .then(sendMidi)
-      .catch((err) => console.log(err));
-    async function sendMidi() {
-      const myOutput = WebMidi.getOutputByName(output);
-      const playTime = WebMidi.time + 5;
-      if (playMethod === "MiDi") {
-        if (noteOnOff === "pressed") {
-          for (let i = 0; i < note.length; i++) {
-            myOutput.sendNoteOn(note[i], {
-              channels: channelNumber[i],
-              time: playTime,
-            });
-          }
-        } else {
-          for (let i = 0; i < note.length; i++) {
-            myOutput.sendNoteOff(note[i], {
-              channels: channelNumber[i],
-              time: playTime,
-            });
-          }
-        }
-      } else if (playMethod === "ProgramChange") {
-        if (noteOnOff === "pressed") {
-          for (let i = 0; i < note.length; i++) {
-            const nodeToPlay = 2 * note[i];
-            myOutput.sendProgramChange(nodeToPlay, {
-              channels: channelNumber[i],
-              // time: playTime,
-            });
-          }
-        } else if (noteOnOff === "released") {
-          for (let i = 0; i < note.length; i++) {
-            const nodeToPlay = 2 * note[i] + 1;
-            myOutput.sendProgramChange(nodeToPlay, {
-              channels: channelNumber[i],
-              // time: playTime,
-            });
-          }
-          // Przetestować dlaczego time nie chce działać
-        } else {
-          // const nodeToPlay = 2 * note;
-          myOutput.sendProgramChange(note, {
-            channels: channelNumber,
-            // time: playTime,
+    const myOutput = new easymidi.Output(output);
+    if (playMethod === "MiDi") {
+      if (noteOnOff === "pressed") {
+        for (let i = 0; i < note.length; i++) {
+          myOutput.send("noteon", {
+            note: note[i],
+            velocity: 127,
+            channel: channelNumber[i],
           });
         }
       } else {
-        myOutput.sendAllSoundOff();
+        for (let i = 0; i < note.length; i++) {
+          console.log(note[i]);
+          console.log(channelNumber[i]);
+          // setTimeout(() => {
+          myOutput.send("noteoff", {
+            note: note[i],
+            velocity: 0,
+            channel: channelNumber[i],
+          });
+          // }, 1000);
+        }
+      }
+    } else if (playMethod === "ProgramChange") {
+      if (noteOnOff === "pressed") {
+        for (let i = 0; i < note.length; i++) {
+          const nodeToPlay = 2 * note[i];
+          myOutput.send("program", {
+            number: nodeToPlay,
+            channel: channelNumber[i],
+          });
+        }
+      } else if (noteOnOff === "released") {
+        for (let i = 0; i < note.length; i++) {
+          const nodeToPlay = 2 * note[i] + 1;
+          myOutput.send("program", {
+            number: nodeToPlay,
+            channel: channelNumber[i],
+          });
+        }
+        // Przetestować dlaczego time nie chce działać
+      } else {
+        myOutput.send("program", {
+          number: note,
+          channel: channelNumber[0],
+        });
       }
     }
     return { succes: true };
@@ -130,19 +116,13 @@ export const resetMidi = async (params: any) => {
     if (chosenOutput !== output) {
       choseMidi(chosenOutput);
     }
-    WebMidi.enable()
-      .then(() => console.log(""))
-      .catch((err) => console.log(err));
-    WebMidi.enable()
-      .then(sendMidi)
-      .catch((err) => console.log(err));
-    async function sendMidi() {
-      const myOutput = WebMidi.getOutputByName(output);
-      myOutput.sendReset();
-      myOutput.sendResetAllControllers();
-      myOutput.sendAllSoundOff();
-      myOutput.sendAllNotesOff();
-    }
+    const myOutput = new easymidi.Output(output);
+    // myOutput.send('sysex', [0xF0, 0x7E, 0x7F, 0x09, 0x01, 0xF7] );
+    myOutput.send("reset");
+    // myOutput.sendReset();
+    // myOutput.sendResetAllControllers();
+    // myOutput.sendAllSoundOff();
+    // myOutput.sendAllNotesOff();
   } catch (error) {
     console.error(error);
     return "Error";
