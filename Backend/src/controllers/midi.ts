@@ -58,9 +58,6 @@ export const midi = async (params: any) => {
     if (playMethod === "MiDi") {
       if (noteOnOff === "pressed") {
         for (let i = 0; i < note.length; i++) {
-          console.log(typeof Number(note[i]));
-          console.log(typeof channelNumber[i]);
-
           myOutput.send("noteon", {
             note: Number(note[i]),
             velocity: 127,
@@ -69,44 +66,35 @@ export const midi = async (params: any) => {
         }
       } else {
         for (let i = 0; i < note.length; i++) {
-          console.log(typeof Number(note[i]));
-          console.log(typeof channelNumber[i]);
           myOutput.send("noteon", {
             note: Number(note[i]),
             velocity: 0,
             channel: channelNumber[i],
           });
-          // }, 1000);
         }
       }
     } else if (playMethod === "ProgramChange") {
       if (noteOnOff === "pressed") {
         for (let i = 0; i < note.length; i++) {
           const nodeToPlay = 2 * note[i];
-          console.log(typeof Number(nodeToPlay));
-          console.log(typeof channelNumber[i]);
           myOutput.send("program", {
             number: Number(nodeToPlay),
-            channel: channelNumber[i],
+            channel: Number(channelNumber[i]),
           });
         }
       } else if (noteOnOff === "released") {
         for (let i = 0; i < note.length; i++) {
           const nodeToPlay = 2 * note[i] + 1;
-          console.log(typeof Number(nodeToPlay));
-          console.log(typeof channelNumber[i]);
           myOutput.send("program", {
             number: Number(nodeToPlay),
-            channel: channelNumber[i],
+            channel: Number(channelNumber[i]),
           });
         }
         // Przetestować dlaczego time nie chce działać
       } else {
-        console.log(typeof Number(note));
-        console.log(typeof channelNumber[0]);
         myOutput.send("program", {
           number: Number(note),
-          channel: channelNumber[0],
+          channel: Number(channelNumber[0]),
         });
       }
     }

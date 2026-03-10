@@ -1,0 +1,13 @@
+diff --git a/node_modules/easymidi/index.d.ts b/node_modules/easymidi/index.d.ts
+index a17ef4d..cd03fd8 100644
+--- a/node_modules/easymidi/index.d.ts
++++ b/node_modules/easymidi/index.d.ts
+@@ -22,7 +22,7 @@ export interface ControlChange {
+ 
+ export interface Program {
+   number: number;
+-  channel: Channel;
++  channel: number;
+ }
+ 
+ export interface ChannelAfterTouch {
