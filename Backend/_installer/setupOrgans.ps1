@@ -34,14 +34,41 @@ Add-AppxPackage -Path "$HOME_DIR\Downloads\AppInstaller.msixbundle"
 winget install --id Git.Git -e --silent
 winget install --id OpenJS.NodeJS.LTS -e --silent
 winget install --id CaddyServer.Caddy -e --silent
-Start-Sleep 5
 $caddyPath = Split-Path (Get-Command caddy).Source
 $env:Path += ";$env:ProgramFiles\nodejs"
 $env:Path += ";$env:APPDATA\npm"
 $env:Path += ";$caddyPath"
-npm config set fund false
-npm config set audit false
+
 npm install -g pm2
+Start-Sleep -Seconds 5  # krótka pauza, by system zaktualizował PATH
+
+$caddyPath = (Get-Command caddy.exe -ErrorAction SilentlyContinue).Source
+
+if (-not $caddyPath) {
+    # Jeśli nie znaleziono w PATH, spróbuj standardowych lokalizacji
+    $possiblePaths = @(
+        "$env:ProgramFiles\Caddy\caddy.exe",
+        "$env:ProgramFiles(x86)\Caddy\caddy.exe",
+        "$env:LocalAppData\Programs\Caddy\caddy.exe"
+    )
+    foreach ($p in $possiblePaths) {
+        if (Test-Path $p) {
+            $caddyPath = $p
+            break
+        }
+    }
+}
+
+if (-not $caddyPath) {
+    Write-Error "Nie można znaleźć caddy.exe po instalacji. Upewnij się, że Caddy został poprawnie zainstalowany."
+    exit 1
+}
+
+# Dodaj folder z caddy.exe do PATH w bieżącej sesji
+$env:Path += ";" + (Split-Path $caddyPath)
+
+Write-Host "Znaleziono caddy.exe w: $caddyPath"
+Write-Host "Aktualna zmienna PATH: $env:Path"
 
 
 Write-Host "Stage 2 - Create app directory"
@@ -75,55 +102,43 @@ New-Item -ItemType Directory -Force -Path $caddyDir
 
 $caddyConfig = @"
 :80 {
-
-    encode gzip zstd
-
-handle_path /api/* {
-    reverse_proxy localhost:3000 {
-        transport http {
-            dial_timeout 5s
-        }
-        lb_try_duration 30s
-        try_duration 30s
-    }
-}
     root * $APP_DIR\frontend\dist
     file_server
 
     try_files {path} {path}/ /index.html
+
+    handle_path /api/* {
+       reverse_proxy localhost:3000
+    }
 }
 "@
-$caddyConfigPath = "$caddyDir\Caddyfile"
 
-$caddyConfig | Out-File "$caddyConfigPath" -Encoding ascii
+$caddyConfig | Out-File "$caddyDir\Caddyfile" -Encoding ascii
 
 Write-Host "Stage 7 - Install Caddy service"
-$caddyExe = (Get-Command caddy).Source
-
-if (-not (Get-Service -Name "Caddy" -ErrorAction SilentlyContinue)) {
-    $bin = "`"$caddyExe`" run --config `"$caddyConfigPath`" --adapter caddyfile"
-    New-Service -Name "Caddy" `
-                -BinaryPathName $bin `
-                -DisplayName "Caddy Server" `
-                -StartupType Automatic
-
-    sc.exe failure Caddy reset= 0 actions= restart/5000
+if (Get-Service -Name "Caddy" -ErrorAction SilentlyContinue) {
+    Stop-Service Caddy -Force
+    sc.exe delete Caddy | Out-Null
+    Start-Sleep -Seconds 2
 }
-
-Start-Service -Name "Caddy"
+New-Service -Name "Caddy" `
+    -BinaryPathName "`"$caddyPath`" run --config `"$caddyDir\Caddyfile`"" `
+    -DisplayName "Caddy Web Server" `
+    -StartupType Automatic
+Start-Service caddy
 
 Write-Host "Stage 8 - Set static IP"
 
 $adapter = Get-NetAdapter | Where-Object {$_.Status -eq "Up" -and $_.InterfaceDescription -match "Wi-Fi|Wireless|WLAN"} | Select-Object -First 1
 
 Start-Sleep -Seconds 5
-if (-not (Get-NetIPAddress -IPAddress 10.50.50.10 -ErrorAction SilentlyContinue)) {
+
 New-NetIPAddress `
 -InterfaceIndex $adapter.InterfaceIndex `
--IPAddress 10.50.50.10 `
+-IPAddress 10.50.50.15 `
 -PrefixLength 24 `
 -DefaultGateway 10.50.50.1
-}
+
 Set-DnsClientServerAddress `
 -InterfaceIndex $adapter.InterfaceIndex `
 -ServerAddresses 8.8.8.8,1.1.1.1
@@ -141,6 +156,6 @@ Set-Location "$APP_DIR\Program\Backend"
 
 pm2 start pm2.config.js --env production
 pm2 save
-pm2 startup powershell -u $USER_NAME --hp $HOME_DIR
+pm2 startup powershell -u $USER_NAME --hp $APP_DIR
 
 Write-Host "Installation completed"
