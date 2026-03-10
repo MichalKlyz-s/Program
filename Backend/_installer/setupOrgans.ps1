@@ -108,6 +108,7 @@ $caddyConfig = @"
     try_files {path} {path}/ /index.html
 
     handle_path /api/* {
+       uri strip_prefix /api
        reverse_proxy localhost:3000
     }
 }
