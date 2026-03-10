@@ -25,7 +25,7 @@ echo "Start 3 stage - Prepere Backend"
 
 cd $ORGAN_APP_DIR/Program/Backend
 npm install
-npm run build
+npm run buildFirst
 
 echo "Start 4 stage - Prepere Frontend"
 

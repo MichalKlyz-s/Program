@@ -50,28 +50,29 @@ export const midi = async (params: any) => {
   if (!note || !noteOnOff || !channelNumber || !playMethod || !chosenOutput) {
     return { succes: false };
   }
+  if (chosenOutput !== output) {
+    choseMidi(chosenOutput);
+  }
   const myOutput = new easymidi.Output(output);
   try {
-    console.log(chosenOutput);
-    if (chosenOutput !== output) {
-      choseMidi(chosenOutput);
-    }
     if (playMethod === "MiDi") {
       if (noteOnOff === "pressed") {
         for (let i = 0; i < note.length; i++) {
+          console.log(typeof Number(note[i]));
+          console.log(typeof channelNumber[i]);
+
           myOutput.send("noteon", {
-            note: note[i],
+            note: Number(note[i]),
             velocity: 127,
             channel: channelNumber[i],
           });
         }
       } else {
         for (let i = 0; i < note.length; i++) {
-          console.log(note[i]);
-          console.log(channelNumber[i]);
-          // setTimeout(() => {
-          myOutput.send("noteoff", {
-            note: note[i],
+          console.log(typeof Number(note[i]));
+          console.log(typeof channelNumber[i]);
+          myOutput.send("noteon", {
+            note: Number(note[i]),
             velocity: 0,
             channel: channelNumber[i],
           });
@@ -82,23 +83,29 @@ export const midi = async (params: any) => {
       if (noteOnOff === "pressed") {
         for (let i = 0; i < note.length; i++) {
           const nodeToPlay = 2 * note[i];
+          console.log(typeof Number(nodeToPlay));
+          console.log(typeof channelNumber[i]);
           myOutput.send("program", {
-            number: nodeToPlay,
+            number: Number(nodeToPlay),
             channel: channelNumber[i],
           });
         }
       } else if (noteOnOff === "released") {
         for (let i = 0; i < note.length; i++) {
           const nodeToPlay = 2 * note[i] + 1;
+          console.log(typeof Number(nodeToPlay));
+          console.log(typeof channelNumber[i]);
           myOutput.send("program", {
-            number: nodeToPlay,
+            number: Number(nodeToPlay),
             channel: channelNumber[i],
           });
         }
         // Przetestować dlaczego time nie chce działać
       } else {
+        console.log(typeof Number(note));
+        console.log(typeof channelNumber[0]);
         myOutput.send("program", {
-          number: note,
+          number: Number(note),
           channel: channelNumber[0],
         });
       }
