@@ -50,12 +50,12 @@ export const midi = async (params: any) => {
   if (!note || !noteOnOff || !channelNumber || !playMethod || !chosenOutput) {
     return { succes: false };
   }
+  const myOutput = new easymidi.Output(output);
   try {
     console.log(chosenOutput);
     if (chosenOutput !== output) {
       choseMidi(chosenOutput);
     }
-    const myOutput = new easymidi.Output(output);
     if (playMethod === "MiDi") {
       if (noteOnOff === "pressed") {
         for (let i = 0; i < note.length; i++) {
@@ -107,11 +107,14 @@ export const midi = async (params: any) => {
   } catch (error) {
     console.error(error);
     return "Error";
+  } finally {
+    myOutput.close();
   }
 };
 
 export const resetMidi = async (params: any) => {
   const chosenOutput = params;
+  const myOutput = new easymidi.Output(output);
   try {
     if (chosenOutput !== output) {
       choseMidi(chosenOutput);
@@ -126,5 +129,7 @@ export const resetMidi = async (params: any) => {
   } catch (error) {
     console.error(error);
     return "Error";
+  } finally {
+    myOutput.close();
   }
 };
