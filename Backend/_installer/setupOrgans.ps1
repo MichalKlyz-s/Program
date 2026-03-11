@@ -86,7 +86,7 @@ Write-Host "Stage 4 - Build Backend"
 Set-Location "$APP_DIR\Program\Backend"
 
 npm install
-npm run build
+npm run buildfirst
 
 Write-Host "Stage 5 - Build Frontend"
 
