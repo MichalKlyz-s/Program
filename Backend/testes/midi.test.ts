@@ -79,7 +79,6 @@ describe("midiProgramChangeOn", () => {
     );
     expect(mockSendProgramChange).toHaveBeenCalledWith(params.note[0] * 2, {
       channels: params.channel[0],
-      time: playTime,
     });
     expect(res).toEqual({ succes: true });
   });
@@ -108,7 +107,6 @@ describe("midiProgramChangeOff", () => {
     );
     expect(mockSendProgramChange).toHaveBeenCalledWith(params.note[0] * 2 + 1, {
       channels: params.channel[0],
-      time: playTime,
     });
     expect(res).toEqual({ succes: true });
   });

@@ -94,7 +94,6 @@ export const midi = async (params: any) => {
             const nodeToPlay = 2 * note[i];
             myOutput.sendProgramChange(nodeToPlay, {
               channels: channelNumber[i],
-              // time: playTime,
             });
           }
         } else if (noteOnOff === "released") {
@@ -102,15 +101,11 @@ export const midi = async (params: any) => {
             const nodeToPlay = 2 * note[i] + 1;
             myOutput.sendProgramChange(nodeToPlay, {
               channels: channelNumber[i],
-              // time: playTime,
             });
           }
-          // Przetestować dlaczego time nie chce działać
         } else {
-          // const nodeToPlay = 2 * note;
           myOutput.sendProgramChange(note, {
             channels: channelNumber,
-            // time: playTime,
           });
         }
       } else {
