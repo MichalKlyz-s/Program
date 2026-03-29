@@ -53,7 +53,7 @@ describe("midiSendNoteON", () => {
       channels: params.channel[0],
       time: playTime,
     });
-    expect(res).toEqual({ succes: true });
+    expect(res).toEqual(true);
   });
 });
 describe("midiProgramChangeOn", () => {
@@ -80,7 +80,7 @@ describe("midiProgramChangeOn", () => {
     expect(mockSendProgramChange).toHaveBeenCalledWith(params.note[0] * 2, {
       channels: params.channel[0],
     });
-    expect(res).toEqual({ succes: true });
+    expect(res).toEqual(true);
   });
 });
 describe("midiProgramChangeOff", () => {
@@ -108,6 +108,6 @@ describe("midiProgramChangeOff", () => {
     expect(mockSendProgramChange).toHaveBeenCalledWith(params.note[0] * 2 + 1, {
       channels: params.channel[0],
     });
-    expect(res).toEqual({ succes: true });
+    expect(res).toEqual(true);
   });
 });
