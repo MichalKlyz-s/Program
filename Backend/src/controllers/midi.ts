@@ -57,7 +57,7 @@ export const midi = async (params: any) => {
   const playMethod = params.playMethod;
   const chosenOutput = params.chosenOutput;
   if (!note || !noteOnOff || !channelNumber || !playMethod || !chosenOutput) {
-    return { succes: false };
+    return false;
   }
   try {
     if (chosenOutput !== output) {
@@ -91,15 +91,15 @@ export const midi = async (params: any) => {
       } else if (playMethod === "ProgramChange") {
         if (noteOnOff === "pressed") {
           for (let i = 0; i < note.length; i++) {
-            const nodeToPlay = 2 * note[i];
-            myOutput.sendProgramChange(nodeToPlay, {
+            const noteToPlay = 2 * note[i];
+            myOutput.sendProgramChange(noteToPlay, {
               channels: channelNumber[i],
             });
           }
         } else if (noteOnOff === "released") {
           for (let i = 0; i < note.length; i++) {
-            const nodeToPlay = 2 * note[i] + 1;
-            myOutput.sendProgramChange(nodeToPlay, {
+            const noteToPlay = 2 * note[i] + 1;
+            myOutput.sendProgramChange(noteToPlay, {
               channels: channelNumber[i],
             });
           }
@@ -112,7 +112,7 @@ export const midi = async (params: any) => {
         myOutput.sendAllSoundOff();
       }
     }
-    return { succes: true };
+    return true;
   } catch (error) {
     console.error(error);
     return "Error";

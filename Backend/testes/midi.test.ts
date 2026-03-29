@@ -30,7 +30,7 @@ describe("getsOutputsList", () => {
   });
 });
 describe("midiSendNoteON", () => {
-  it("Wyślij sygnał do Midi sendNoteOn", async () => {
+  it("Wyślij komunikat Midi sendNoteOn", async () => {
     const mockSendNoteOn = jest.fn();
     const params = {
       note: [4],
@@ -57,7 +57,7 @@ describe("midiSendNoteON", () => {
   });
 });
 describe("midiProgramChangeOn", () => {
-  it("Wyślij sygnał do Midi sendProgramChange -ON", async () => {
+  it("Wyślij komunikat Midi sendProgramChange -ON", async () => {
     const mockSendProgramChange = jest.fn();
 
     const params = {
@@ -84,7 +84,7 @@ describe("midiProgramChangeOn", () => {
   });
 });
 describe("midiProgramChangeOff", () => {
-  it("Wyślij sygnał do Midi sendProgramChange -OFF", async () => {
+  it("Wyślij komunikat MIDI sendProgramChange -OFF", async () => {
     const mockSendProgramChange = jest.fn();
 
     const params = {
