@@ -57,7 +57,7 @@ npm run buildfirst
 
 Write-Host "Stage 5 - Set static IP"
 
-$adapter = Get-NetAdapter | Where-Object {$_.Status -eq "Up" -and $_.InterfaceDescription -match "Ethernet|LAN"} | Select-Object -First 1
+$adapter = Get-NetAdapter | Where-Object {$_.Status -eq "Up" -and $_.InterfaceDescription -match "Ethernet"} | Select-Object -First 1
 
 Start-Sleep -Seconds 5
 
